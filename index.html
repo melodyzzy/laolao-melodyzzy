@@ -1,122 +1,94 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>老师 菜菜 捞捞 呜呜</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-image: url('background.jpg'); /* 请替换为你的背景图路径 */
-            background-size: cover;
-            text-align: center;
-        }
-        .content {
-            color: rgb(35, 21, 227);
-            font-size: 2em;
-            position: absolute;
-            top: 20%;
-            background-color: rgba(255, 255, 255, 0.7); /* 添加背景色 */
-            padding: 10px;
-            border-radius: 10px;
-        }
-        .buttons {
-            position: absolute;
-            bottom: 10%;
-            width: 100%;
-            display: flex;
-            justify-content: center; /* 调整为居中 */
-            gap: 20px; /* 增加按钮之间的间距 */
-        }
-        .button {
-            padding: 15px 30px;
-            font-size: 1.5em;
-            cursor: pointer;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            text-align: center;
-        }
-        .close-button {
-            padding: 10px 20px;
-            font-size: 1em;
-            cursor: pointer;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            margin-top: 20px;
-        }
-    </style>
+    <title>new try</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div class="content">伟大的老师，您愿意捞捞我们吗</div>
-    <div class="buttons">
-        <button class="button" id="yesButton">好呀好呀</button>
-        <button class="button" id="noButton">我想想哦</button>
-    </div>
 
-    <div id="yesModal" class="modal">
-        <div class="modal-content">
-            <p>就知道善良的老师会选择这个按钮的，老师万岁</p>
-            <button class="close-button" onclick="closeModal('yesModal')">关闭</button>
+    <div class="clock">
+        <div class="layer layer--img"></div>
+        <div class="layer layer--shade"></div>
+        <div class="layer layer--face">
+            <div class="digits">
+                <span class="digit-group" data-unit="h">12</span>
+                <span>:</span>
+                <span class="digit-group" data-unit="m">00</span>
+                <small class="digit-group digit-group--small" data-unit="s">00</small>
+                <small class="digit-group digit-group--small" data-unit="ap">A</small>
+            </div>
+            <div class="hand hand--hr"></div>
+            <div class="hand hand--min"></div>
+            <div class="hand hand--sec"></div>
+            <div class="ring"></div>
+        </div>
+        <div class="layer layer--profile">
+            <img src="./04.jpg" alt="" class="profile">
         </div>
     </div>
 
-    <div id="noModal" class="modal">
-        <div class="modal-content">
-            <p>欸呀呀，老师是不是一不小心点错了</p>
-            <button class="close-button" onclick="closeModal('noModal')">关闭</button>
-        </div>
-    </div>
-
-    <script>
-        const yesButton = document.getElementById('yesButton');
-        const noButton = document.getElementById('noButton');
-        const yesModal = document.getElementById('yesModal');
-        const noModal = document.getElementById('noModal');
-
-        yesButton.addEventListener('click', () => {
-            yesModal.style.display = 'block';
-        });
-
-        noButton.addEventListener('click', () => {
-            noModal.style.display = 'block';
-        });
-
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.style.display = 'none';
-
-            if (modalId === 'noModal') {
-                noButton.style.display = 'none';
-                yesButton.style.margin = '0 auto';
-            }
-        }
-    </script>
 </body>
+<script>
+    // 页面加载完成后执行初始化操作
+    window.addEventListener("DOMContentLoaded", () => {
+        const c = new Clock7(".clock");
+    });
+
+    // 时钟类定义
+    class Clock7 {
+        constructor(el) {
+            this.el = document.querySelector(el);
+            this.init();
+        }
+        // 初始化函数
+        init() {
+            this.timeUpdate();
+        }
+        // 获取当前时间对象
+        get timeAsObject() {
+            const date = new Date();
+            let h = date.getHours();
+            const m = date.getMinutes();
+            const s = date.getSeconds();
+            return { h, m, s };
+        }
+        // 获取当前时间字符串
+        get timeAsString() {
+            const [h, m, s, ap] = this.timeDigitsGrouped;
+            return `${h}:${m}:${s} ${ap}M`;
+        }
+        // 获取当前时间数字组
+        get timeDigitsGrouped() {
+            let { h, m, s } = this.timeAsObject;
+            const ap = h > 11 ? "P" : "A";
+            if (h === 0) h += 12;
+            else if (h > 12) h -= 12;
+            if (m < 10) m = `0${m}`;
+            if (s < 10) s = `0${s}`;
+            return [h, m, s, ap];
+        }
+        // 更新时间显示
+        timeUpdate() {
+            this.el?.setAttribute("aria-label", this.timeAsString);
+            const time = this.timeAsObject;
+            const secFraction = time.s / 60;
+            const minFraction = (time.m + secFraction) / 60;
+            const hrFraction = (time.h + minFraction) / 12;
+            this.el?.style.setProperty("--secAngle", `${360 * secFraction}deg`);
+            this.el?.style.setProperty("--minAngle", `${360 * minFraction}deg`);
+            this.el?.style.setProperty("--hrAngle", `${360 * hrFraction}deg`);
+            Array.from(document.querySelectorAll(`[data-unit]`)).forEach((unit, i) => {
+                unit.innerText = this.timeDigitsGrouped[i];
+            })
+            clearTimeout(this.timeUpdateLoop);
+            this.timeUpdateLoop = setTimeout(this.timeUpdate.bind(this), 1e3);
+        }
+    }
+
+</script>
+
 </html>

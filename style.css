@@ -1,0 +1,162 @@
+/* style.css */
+
+/* 设置全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 设置背景图片和背景样式 */
+body {
+    background: url('bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: hsl(0, 0%, 100%);
+    font: 1em/1.5 Rubik, sans-serif;
+    display: flex;
+    height: 100vh;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* 时钟容器样式，放置在右下角 */
+.clock {
+    --hrAngle: 0;
+    --minAngle: 0;
+    --secAngle: 0;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 50px; /* 调整到距离底部 */
+    right: 50px; /* 调整到距离右侧 */
+    width: 12em;
+    height: 12em;
+    transform: rotateX(0) rotateY(0) rotateZ(0);
+    transform-style: preserve-3d;
+    transition: transform 0.3s cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+/* 时钟头像样式 */
+.profile {
+    background-color: hsl(223, 10%, 50%);
+    border: 0;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0.25em hsla(223, 90%, 10%, 0.6);
+    display: block;
+    margin: 7.75em auto 0 auto;
+    width: 2em;
+    height: 2em;
+}
+
+/* 鼠标悬停时钟样式 */
+.clock:focus-visible,
+.clock:hover {
+    transform: rotateX(30deg) rotateY(-30deg) rotateZ(30deg);
+}
+
+/* 时钟数字容器样式 */
+.digits {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    line-height: 1;
+    margin-top: 2.25em;
+    user-select: none;
+}
+
+/* 时钟数字组样式 */
+.digit-group {
+    margin: 0 0.1em;
+    width: 2ch;
+}
+
+.digit-group[data-unit="h"] {
+    text-align: right;
+}
+
+.digit-group--small {
+    font-size: 0.75em;
+}
+
+/* 时钟指针、层和环样式 */
+.hand,
+.layer,
+.ring {
+    position: absolute;
+}
+
+/* 时钟指针样式 */
+.hand {
+    bottom: calc(50% - 0.5em);
+    left: calc(50% - 0.5em);
+    width: 1em;
+    mix-blend-mode: difference;
+    perspective: 4.25em;
+    transform-origin: 0.5em calc(100% - 0.5em);
+    transition: .5s;
+}
+
+.hand--hr {
+    height: 2.75em;
+    transform: rotate(var(--hrAngle)) translateY(-2em);
+}
+
+.hand--min {
+    height: 3.75em;
+    transform: rotate(var(--minAngle)) translateY(-2em);
+}
+
+.hand--sec {
+    width: .5em;
+    height: 3.75em;
+    transform: rotate(var(--secAngle)) translateY(-2em);
+}
+
+.hand:before {
+    background-color: hsl(0, 0%, 100%);
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform: rotateX(-30deg);
+    transform-origin: 50% 100%;
+}
+
+.hand--hr:before {
+    border-radius: 0.5em 0.5em 0.5em 0.5em / 0.5em 0.5em 0.75em 0.75em;
+}
+
+.hand--min:before {
+    border-radius: 0 0 0.5em 0.5em / 0 0 0.75em 0.75em;
+}
+
+.hand--sec:before {
+    border-radius: 0 0 0.25em 0.25em / 0 0 0.5em 0.5em;
+}
+
+.layer,
+.ring {
+    border-radius: 50%;
+    inset: 0;
+}
+
+/* 时钟表盘层样式 */
+.layer--face {
+    transform: translateZ(3.75em);
+}
+
+.layer--img {
+    background: url("./05.jpg") 0 0 / 100% 100%;
+    transform: translateZ(-3.75em);
+}
+
+.layer--profile {
+    transform: translateZ(11em);
+}
+
+/* 时钟遮罩层样式 */
+.layer--shade {
+    background-color: hsla(223, 90%, 10%, 0.6);
+}
+
+.ring {
+    box-shadow: 0 0 0 0.625em hsl(0, 0%, 100%) inset;
+}
